@@ -1,22 +1,16 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './navigation/screens/HomeScreen';
-import MoviesScreen from './navigation/screens/MoviesScreen';
-import ProfileScreen from './navigation/screens/ProfileScreen';
-import Stack from './navigation/AppStack';
 
-
-
-function App(): JSX.Element {
+const ProfileScreen = () => {
   return (
-    
-    <NavigationContainer>{
+    // <NavigationContainer>{
       <SafeAreaView style={{flex: 1}}>
-        <MoviesScreen/>
+        <View style={styles.centered}>
+          <Text style={styles.title}>The Start</Text>
+        </View>
       </SafeAreaView>
-    }</NavigationContainer>
+    // }</NavigationContainer>
   );
 }
 
@@ -37,7 +31,7 @@ const styles = StyleSheet.create({
     color: '#301934',
   },
 });
-export default App;
+export default ProfileScreen;
 
 
 // #252B48 dark blue
