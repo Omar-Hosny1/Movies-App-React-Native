@@ -1,35 +1,23 @@
-import {
-  Badge,
-  Box,
-  FlatList,
-  HStack,
-  HamburgerIcon,
-  Text,
-  ZStack,
-} from 'native-base';
-import React, {useEffect, useState} from 'react';
-import {Image} from 'react-native';
-import api_properties from '../config/api';
-import Movie from '../interfaces/movie';
+import {Box, Center, FlatList, HStack, HamburgerIcon, Text} from 'native-base';
+import React, {useEffect} from 'react';
 import MovieItem from '../components/Movie-Item';
 import HMovieItem from '../components/HMovie-Item';
+import {GetAllMovies} from '../redux/movies-slice';
+import {useSelector, useDispatch} from 'react-redux';
+import MoviesSliceState from '../interfaces/movies-slice-state';
+import NetworkState from '../components/Network-State';
 
-function Home() {
-  const [movies, setMovies] = useState<Movie[]>([]);
+function Home({navigation}: {navigation: any}) {
+  const {
+    items: movies,
+    isErrorHappend,
+    isLoading,
+  } = useSelector((state: any) => state.movies) as MoviesSliceState;
+
+  const dispatch = useDispatch<any>();
 
   useEffect(() => {
-    fetch(api_properties.API_URL)
-      .then(response => {
-        if (!response.ok) {
-          return;
-        }
-        return response.json();
-      })
-      .then(fullData => {
-        const moviesData = fullData.results;
-        setMovies(moviesData as Movie[]);
-        return moviesData;
-      });
+    dispatch(GetAllMovies());
   }, []);
 
   return (
@@ -42,17 +30,23 @@ function Home() {
         paddingHorizontal: 15,
       }}>
       <Box flex={1}>
-        <HStack justifyContent={'space-between'} alignItems={'center'}>
-          <Text color={'white'} fontSize={30}>
-            Movies
-          </Text>
-          <HamburgerIcon color={'white'} size={27} />
-        </HStack>
-        <FlatList
-          flex={1}
-          horizontal
-          data={[...movies].reverse()}
-          renderItem={({item}) => <HMovieItem item={item} />}
+        <NetworkState
+          isErrorHappend={isErrorHappend}
+          isLoading={isLoading}
+          component={
+            movies.length > 0 ? (
+              <FlatList
+                flex={1}
+                horizontal
+                data={[...movies].reverse()}
+                renderItem={({item}) => <HMovieItem item={item} />}
+              />
+            ) : (
+              <Center mt={5}>
+                <Text>No Movies Found</Text>
+              </Center>
+            )
+          }
         />
       </Box>
 
@@ -61,12 +55,24 @@ function Home() {
           <Text color={'white'} fontSize={25}>
             All Movies
           </Text>
-          <FlatList
-            numColumns={2}
-            data={movies}
-            renderItem={({item}) => {
-              return <MovieItem item={item} />;
-            }}
+          <NetworkState
+            isErrorHappend={isErrorHappend}
+            isLoading={isLoading}
+            component={
+              movies.length > 0 ? (
+                <FlatList
+                  numColumns={2}
+                  data={movies}
+                  renderItem={({item}) => {
+                    return <MovieItem item={item} navigation={navigation} />;
+                  }}
+                />
+              ) : (
+                <Center mt={5}>
+                  <Text>No Movies Found</Text>
+                </Center>
+              )
+            }
           />
         </Box>
       </Box>

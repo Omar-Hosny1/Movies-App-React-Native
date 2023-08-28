@@ -26,7 +26,7 @@ function HMovieItem({item}: Props) {
         borderRadius={10}
         height={200}
         bg={'black'}
-        opacity={0.7}
+        opacity={0.6}
       />
       <Box m={2} maxW={330}>
         <Text color={'white'} fontSize={25}>
