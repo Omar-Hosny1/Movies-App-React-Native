@@ -35,7 +35,7 @@ function App(): JSX.Element {
               <Tab.Screen
                 name="Home"
                 component={Home}
-                options={getCommonOptions(<CircleIcon name="FavouriteIcon" />)}
+                options={getCommonOptions(<CircleIcon name="HomeIcon" />)}
               />
               <Tab.Screen
                 name="Favourites"

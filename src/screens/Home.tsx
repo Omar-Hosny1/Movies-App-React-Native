@@ -1,4 +1,4 @@
-import {Box, Center, FlatList, HStack, HamburgerIcon, Text} from 'native-base';
+import {Box, Center, FlatList, Text} from 'native-base';
 import React, {useEffect} from 'react';
 import MovieItem from '../components/Movie-Item';
 import HMovieItem from '../components/HMovie-Item';
