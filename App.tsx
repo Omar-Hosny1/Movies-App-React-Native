@@ -1,31 +1,62 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView} from 'react-native';
+import {NativeBaseProvider, FavouriteIcon, CircleIcon} from 'native-base';
+import Home from './src/screens/Home';
+import {Provider} from 'react-redux';
+import store from './src/redux/store';
+import {NavigationContainer} from '@react-navigation/native';
+import MovieDetails from './src/screens/Movie-Details';
+import Favourites from './src/screens/Favourites';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-function App(): JSX.Element {
-  return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={styles.centered}>
-        <Text style={styles.title}>Greeting Team 1</Text>
-      </View>
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'gray',
+const getCommonOptions = (iconComponent: JSX.Element) => ({
+  headerStyle: {
+    backgroundColor: '#293854',
   },
-  title: {
-    fontSize: 18,
-    marginVertical: 2,
+  tabBarStyle: {
+    backgroundColor: '#293854',
+  },
+  headerTitleStyle: {
     color: 'white',
   },
-  subtitle: {
-    fontSize: 14,
-    color: '#888',
-  },
+  tabBarIcon: ({color, size}: any) =>
+    React.cloneElement(iconComponent, {color, size}),
 });
+
+function App(): JSX.Element {
+  const Tab = createBottomTabNavigator();
+
+  return (
+    <NavigationContainer>
+      <Provider store={store}>
+        <NativeBaseProvider>
+          <SafeAreaView style={{flex: 1}}>
+            <Tab.Navigator initialRouteName="Home">
+              <Tab.Screen
+                name="Home"
+                component={Home}
+                options={getCommonOptions(<CircleIcon name="HomeIcon" />)}
+              />
+              <Tab.Screen
+                name="Favourites"
+                component={Favourites}
+                options={getCommonOptions(
+                  <FavouriteIcon name="FavouriteIcon" />,
+                )}
+              />
+              <Tab.Screen
+                name="Details"
+                component={MovieDetails}
+                options={{
+                  ...getCommonOptions(<></>),
+                  tabBarItemStyle: {display: 'none'},
+                }}
+              />
+            </Tab.Navigator>
+          </SafeAreaView>
+        </NativeBaseProvider>
+      </Provider>
+    </NavigationContainer>
+  );
+}
 export default App;
